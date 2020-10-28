@@ -1,108 +1,141 @@
 <template>
-  <div>
-    <div
-      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3"
-    >
-      <h1 class="h2">Backlog</h1>
-      <div class="btn-toolbar mb-2 mb-md-0">
-        <PresetFilter :selectedPreset="currentPreset" @onPresetSelected="onSelectPresetTap"/>
+    <div>
+        <div
+            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3"
+        >
+            <h1 class="h2">Backlog</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <PresetFilter
+                    :selectedPreset="currentPreset"
+                    @onPresetSelected="onSelectPresetTap"
+                />
 
-        <div class="btn-group mr-2">
-          <button type="button" @click="toggleModal" class="btn btn-sm btn-outline-secondary">Add</button>
+                <div class="btn-group mr-2">
+                    <button
+                        type="button"
+                        @click="toggleModal"
+                        class="btn btn-sm btn-outline-secondary"
+                    >Add</button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="table-responsive">
-      <table class="table table-striped table-sm table-hover">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Assignee</th>
-            <th>Title</th>
-            <th>Status</th>
-            <th>Priority</th>
-            <th>Estimate</th>
-            <th>Created</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-bind:key="i.id" v-for="i in items" class="pt-table-row" @click="listItemTap(i)">
-            <td>
-              <img :src="getIndicatorImage(i)" class="backlog-icon">
-            </td>
-            <td>
-              <img :src="i.assignee.avatar" class="li-avatar rounded mx-auto d-block">
-            </td>
-            <td>
-              <span class="li-title">{{i.title}}</span>
-            </td>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Assignee</th>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Estimate</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-bind:key="i.id"
+                        v-for="i in items"
+                        class="pt-table-row"
+                        @click="listItemTap(i)"
+                    >
+                        <td>
+                            <img :src="getIndicatorImage(i)" class="backlog-icon" />
+                        </td>
+                        <td>
+                            <img :src="i.assignee.avatar" class="li-avatar rounded mx-auto d-block" />
+                        </td>
+                        <td>
+                            <span class="li-title">{{i.title}}</span>
+                        </td>
 
-            <td>
-              <span>{{i.status}}</span>
-            </td>
+                        <td>
+                            <span>{{i.status}}</span>
+                        </td>
 
-            <td>
-              <span :class="'badge ' + getPriorityClass(i)">{{i.priority}}</span>
-            </td>
-            <td>
-              <span class="li-estimate">{{i.estimate}}</span>
-            </td>
-            <td>
-              <span class="li-date">{{i.dateCreated.toDateString()}}</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <transition v-if="showAddModal">
-      <div class="modal-mask">
-        <div class="modal-wrapper">
-          <div class="modal-container">
-            <div class="modal-header">
-              <h4 class="modal-title" id="modal-basic-title">Add New Item</h4>
-              <button type="button" class="close" @click="toggleModal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-
-            <div class="modal-body">
-              <form>
-                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">Title</label>
-                  <div class="col-sm-10">
-                    <input class="form-control" v-model="newItem.title" name="title">
-                  </div>
-                </div>
-
-                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">Description</label>
-                  <div class="col-sm-10">
-                    <textarea class="form-control" v-model="newItem.description" name="description"></textarea>
-                  </div>
-                </div>
-
-                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label">Item Type</label>
-                  <div class="col-sm-10">
-                    <select class="form-control" v-model="newItem.typeStr" name="itemType">
-                      <option v-for="t in itemTypesProvider" :key="t" :value="t">{{t}}</option>
-                    </select>
-                  </div>
-                </div>
-              </form>
-            </div>
-
-            <div class="modal-footer">
-              <button class="btn" @click="toggleModal">Cancel</button>
-              <button class="btn btn-primary" @click="onAddSave">OK</button>
-            </div>
-          </div>
+                        <td>
+                            <span :class="'badge ' + getPriorityClass(i)">{{i.priority}}</span>
+                        </td>
+                        <td>
+                            <span class="li-estimate">{{i.estimate}}</span>
+                        </td>
+                        <td>
+                            <span class="li-date">{{i.dateCreated.toDateString()}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-      </div>
-    </transition>
-  </div>
+
+        <transition v-if="showAddModal">
+            <div class="modal-mask">
+                <div class="modal-wrapper">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="modal-basic-title">Add New Item</h4>
+                            <button
+                                type="button"
+                                class="close"
+                                @click="toggleModal"
+                                aria-label="Close"
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Title</label>
+                                    <div class="col-sm-10">
+                                        <input
+                                            class="form-control"
+                                            v-model="newItem.title"
+                                            name="title"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Description</label>
+                                    <div class="col-sm-10">
+                                        <textarea
+                                            class="form-control"
+                                            v-model="newItem.description"
+                                            name="description"
+                                        ></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Item Type</label>
+                                    <div class="col-sm-10">
+                                        <select
+                                            class="form-control"
+                                            v-model="newItem.typeStr"
+                                            name="itemType"
+                                        >
+                                            <option
+                                                v-for="t in itemTypesProvider"
+                                                :key="t"
+                                                :value="t"
+                                            >{{t}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn" @click="toggleModal">Cancel</button>
+                            <button class="btn btn-primary" @click="onAddSave">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </div>
 </template>
 
 <script lang="ts">
@@ -120,10 +153,12 @@ import { ItemType } from '@/core/constants';
 import { PtNewItem } from '@/shared/models/dto/pt-new-item';
 import PresetFilter from '@/components/PresetFilter.vue';
 import { getIndicatorClass } from '@/shared/helpers/priority-styling';
+// import { Grid } from '@progress/kendo-vue-grid';
 
 @Component({
     components: {
         PresetFilter,
+        // Grid,
     },
 })
 export default class BacklogPage extends Vue {

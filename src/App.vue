@@ -1,24 +1,38 @@
 <template>
-  <div>
-    <MainMenu></MainMenu>
+    <div>
+        <MainMenu></MainMenu>
 
-    <div class="container-fluid">
-      <div class="row">
-        <SideMenu></SideMenu>
+        <div class="container-fluid">
+            <div class="row">
+                <SideMenu></SideMenu>
 
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-          <router-view/>
-        </main>
-      </div>
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                    <router-view />
+                </main>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import SideMenu from '@/components/SideMenu.vue';
 import MainMenu from '@/components/MainMenu.vue';
+import '@progress/kendo-ui';
+import '@progress/kendo-theme-default/dist/all.css';
 
+import { ButtonsInstaller } from '@progress/kendo-buttons-vue-wrapper';
+import { DropdownsInstaller } from '@progress/kendo-dropdowns-vue-wrapper';
+import { InputsInstaller } from '@progress/kendo-inputs-vue-wrapper';
+import { LayoutInstaller } from '@progress/kendo-layout-vue-wrapper';
+import { Grid } from '@progress/kendo-vue-grid';
+
+Vue.component('Grid', Grid);
+
+Vue.use(ButtonsInstaller);
+Vue.use(DropdownsInstaller);
+Vue.use(InputsInstaller);
+Vue.use(LayoutInstaller);
 /*
 Component.registerHooks([
   "beforeRouteEnter",
